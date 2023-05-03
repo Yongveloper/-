@@ -6,7 +6,7 @@ const distances = input[1].split(' ');
 const prices = input[2].split(' ');
 const arr = distances.map((item, i) => [+prices[i], +item]);
 
-let min = 1000000001;
+let min = Infinity;
 let sum = 0;
 
 for (const [price, distance] of arr) {
