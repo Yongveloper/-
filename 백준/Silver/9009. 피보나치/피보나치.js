@@ -11,8 +11,8 @@ while (pibo[pibo.length - 1] < 1e9) {
 
 for (let tc = 1; tc <= testCase; tc++) {
   let num = Number(input[tc]);
-  let arr = [];
-  for (let i = pibo.length; i > 0; i--) {
+  const arr = [];
+  for (let i = pibo.length; num > 0; i--) {
     if (num >= pibo[i]) {
       num -= pibo[i];
       arr.push(pibo[i]);
