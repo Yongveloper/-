@@ -35,7 +35,7 @@ while (start <= end) {
     end = mid - 1;
   } else {
     start = mid + 1;
-    result = Math.max(result, mid);
+    result = mid;
   }
 }
 
