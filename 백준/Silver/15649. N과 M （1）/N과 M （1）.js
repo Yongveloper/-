@@ -2,8 +2,8 @@ const fs = require('fs');
 const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split(' ').map(Number);
 const [n, m] = input;
-const array = Array.from({ length: m }, () => 0);
-const check = Array.from({ length: n }, () => false);
+const array = new Array(m).fill(0);
+const check = new Array(n).fill(false);
 let answer = '';
 
 function dfs(L) {
@@ -21,4 +21,4 @@ function dfs(L) {
 }
 dfs(0);
 
-console.log(answer.trim());
+console.log(answer);
