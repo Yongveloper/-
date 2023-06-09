@@ -4,13 +4,12 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const n = Number(input[0]);
 const graph = input.slice(1).map((line) => line.split(' ').map(Number));
-
 const visited = new Array(n).fill(false);
-let m = 1e9;
+let min = 1e9;
 
 function dfs(depth, start, cost) {
   if (depth === n - 1 && graph[start][0] !== 0) {
-    m = Math.min(m, cost + graph[start][0]);
+    min = Math.min(min, cost + graph[start][0]);
     return;
   }
   for (let i = 0; i < n; i++) {
@@ -21,8 +20,7 @@ function dfs(depth, start, cost) {
     }
   }
 }
-
 visited[0] = true;
 dfs(0, 0, 0);
 
-console.log(m);
+console.log(min);
