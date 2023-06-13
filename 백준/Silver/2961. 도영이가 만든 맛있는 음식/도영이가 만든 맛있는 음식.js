@@ -8,7 +8,7 @@ const visited = new Array(n).fill(false);
 let min = 1e9;
 const result = [];
 
-function dfs(depth, start) {
+function dfs(depth) {
   if (depth >= 1) {
     let totalX = 1;
     let totalY = 0;
@@ -18,16 +18,15 @@ function dfs(depth, start) {
     }
     min = Math.min(min, Math.abs(totalX - totalY));
   }
-  for (let i = start; i < n; i++) {
+  for (let i = depth; i < n; i++) {
     if (visited[i]) continue;
     visited[i] = true;
     result.push(arr[i]);
-    dfs(depth + 1, i + 1);
-    visited[i] = false;
+    dfs(i + 1);
     result.pop();
+    visited[i] = false;
   }
 }
-
-dfs(0, 0);
+dfs(0);
 
 console.log(min);
