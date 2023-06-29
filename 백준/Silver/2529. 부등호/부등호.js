@@ -5,7 +5,7 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 const k = Number(input[0]);
 const arr = input[1].split(' ');
 const visited = new Array(10).fill(false);
-let result = [];
+const result = [];
 let current = '';
 let first = '';
 
@@ -21,9 +21,7 @@ function dfs(depth) {
     }
     if (check) {
       current = '';
-      for (const x of result) {
-        current += x + '';
-      }
+      current = result.join('');
       if (first === '') {
         first = current;
       }
@@ -42,4 +40,5 @@ function dfs(depth) {
 }
 
 dfs(0);
+
 console.log(current + '\n' + first);
