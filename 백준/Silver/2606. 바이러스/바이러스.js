@@ -14,14 +14,16 @@ for (const [x, y] of newArr) {
 
 function dfs(v) {
   visited[v] = true;
-  answer++;
 
   for (const i of graph[v]) {
     if (!visited[i]) {
+      answer++;
       dfs(i);
     }
   }
 }
+
+visited[1] = true;
 dfs(1);
 
-console.log(answer - 1);
+console.log(answer);
