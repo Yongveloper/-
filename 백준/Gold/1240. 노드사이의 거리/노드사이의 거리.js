@@ -4,31 +4,34 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const [n, m] = input[0].split(' ').map(Number);
 const graph = Array.from({ length: n + 1 }, () => []);
-let answer = '';
 let visited = [];
-let distance = [];
+let answer = '';
 
 for (let i = 1; i < n; i++) {
-  const [x, y, cost] = input[i].split(' ').map(Number);
-  graph[x].push([y, cost]);
-  graph[y].push([x, cost]);
+  const [a, b, c] = input[i].split(' ').map(Number);
+  graph[a].push([b, c]);
+  graph[b].push([a, c]);
 }
 
-function dfs(x, dist) {
-  if (visited[x]) return;
-  visited[x] = true;
-  distance[x] = dist;
-  for (const [y, cost] of graph[x]) {
-    dfs(y, dist + cost);
+function dfs(v, target, sum) {
+  if (visited[v]) return;
+
+  if (v === target) {
+    answer += sum + '\n';
+    return;
+  }
+
+  visited[v] = true;
+
+  for (const [a, b] of graph[v]) {
+    dfs(a, target, sum + b);
   }
 }
 
-for (let i = 0; i < m; i++) {
-  const [x, y] = input[n + i].split(' ').map(Number);
+for (let i = n; i < n + m; i++) {
+  const [a, b] = input[i].split(' ').map(Number);
+  dfs(a, b, 0);
   visited = new Array(n + 1).fill(false);
-  distance = new Array(n + 1).fill(-1);
-  dfs(x, 0);
-  answer += distance[y] + '\n';
 }
 
 console.log(answer);
