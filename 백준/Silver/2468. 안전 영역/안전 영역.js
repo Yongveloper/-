@@ -2,12 +2,11 @@ const fs = require('fs');
 const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split('\n');
 
-let [n, ...arr] = input;
-n = Number(n);
+const [n, ...arr] = input;
 let graph = arr.map((item) => item.split(' ').map(Number));
-let max = 0;
+let maxHeight = 0;
 for (const x of graph) {
-  max = Math.max(max, ...x);
+  maxHeight = Math.max(maxHeight, ...x);
 }
 
 function dfs(graph, x, y, target) {
@@ -29,12 +28,12 @@ function dfs(graph, x, y, target) {
 
 let answer = 0;
 let count = 0;
-while (max > -1) {
-  graph = arr.map((item) => item.split(' ').map(Number));
+while (maxHeight > -1) {
+  const newGraph = graph.map((item) => [...item]);
 
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < n; j++) {
-      if (dfs(graph, i, j, max)) {
+      if (dfs(newGraph, i, j, maxHeight)) {
         count++;
       }
     }
@@ -43,7 +42,7 @@ while (max > -1) {
   answer = Math.max(answer, count);
   count = 0;
 
-  max--;
+  maxHeight--;
 }
 
 console.log(answer);
