@@ -2,35 +2,42 @@ const fs = require('fs');
 const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split('\n');
 
-const [n, ...arr] = input;
-const board = arr.map((item) => item.split('').map(Number));
-const answer = [];
-const queue = [];
-const dx = [-1, 0, 1, 0];
-const dy = [0, 1, 0, -1];
+const n = Number(input[0]);
+const graph = input.slice(1).map((item) => item.split('').map(Number));
+const dx = [-1, 1, 0, 0];
+const dy = [0, 0, -1, 1];
+let count = 0;
+const dfs = (x, y) => {
+  if (x < 0 || x >= n || y < 0 || y >= n) {
+    return false;
+  }
 
+  if (graph[x][y] === 0) {
+    return false;
+  }
+
+  graph[x][y] = 0;
+  count++;
+
+  for (let i = 0; i < 4; i++) {
+    const nx = x + dx[i];
+    const ny = y + dy[i];
+    dfs(nx, ny);
+  }
+
+  return true;
+};
+
+let connected = 0;
+const counts = [];
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
-    if (board[i][j] === 1) {
-      let count = 1;
-      board[i][j] = 0;
-      queue.push([i, j]);
-      while (queue.length) {
-        const [x, y] = queue.shift();
-        for (let k = 0; k < 4; k++) {
-          const nx = x + dx[k];
-          const ny = y + dy[k];
-          if (nx >= 0 && nx < n && ny >= 0 && ny < n && board[nx][ny] === 1) {
-            board[nx][ny] = 0;
-            count++;
-            queue.push([nx, ny]);
-          }
-        }
-      }
-      answer.push(count);
+    if (dfs(i, j)) {
+      connected++;
+      counts.push(count);
+      count = 0;
     }
   }
 }
 
-answer.sort((a, b) => a - b);
-console.log(`${answer.length}\n${answer.join('\n').trim()}`);
+console.log(connected + '\n' + counts.sort((a, b) => a - b).join('\n'));
