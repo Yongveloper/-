@@ -16,7 +16,6 @@ for (let i = 1; i <= n; i++) {
   }
 }
 
-const visited = new Array(chicken.length).fill(false);
 const result = [];
 let answer = 1e9;
 
@@ -35,12 +34,9 @@ const dfs = (depth, start) => {
   }
 
   for (let i = start; i < chicken.length; i++) {
-    if (visited[i]) continue;
     result.push(chicken[i]);
-    visited[i] = true;
     dfs(depth + 1, i + 1);
     result.pop();
-    visited[i] = false;
   }
 };
 
