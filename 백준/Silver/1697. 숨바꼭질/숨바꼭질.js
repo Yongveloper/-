@@ -33,23 +33,21 @@ class Queue {
 const [n, k] = input.map(Number);
 const MAX = 100001;
 const visited = new Array(MAX).fill(0);
+const queue = new Queue();
+queue.enqueue(n);
 
-const bfs = () => {
-  const queue = new Queue();
-  queue.enqueue(n);
-  while (true) {
-    const curr = queue.dequeue();
-    if (curr === k) {
-      return visited[curr];
-    }
-    for (const nxt of [curr - 1, curr + 1, curr * 2]) {
-      if (nxt < 0 || nxt >= MAX) continue;
-      if (visited[nxt] === 0) {
-        visited[nxt] = visited[curr] + 1;
-        queue.enqueue(nxt);
-      }
+while (queue.size() !== 0) {
+  const v = queue.dequeue();
+
+  if (v === k) {
+    return console.log(visited[v]);
+  }
+
+  for (const x of [v - 1, v + 1, v * 2]) {
+    if (x < 0 || x >= MAX) continue;
+    if (visited[x] === 0) {
+      queue.enqueue(x);
+      visited[x] = visited[v] + 1;
     }
   }
-};
-
-console.log(bfs());
+}
