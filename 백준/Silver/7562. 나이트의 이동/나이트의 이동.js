@@ -47,6 +47,10 @@ while (testCases--) {
 
   while (queue.size() !== 0) {
     const [curX, curY] = queue.dequeue();
+    if (curX === targetX && curY === targetY) {
+      console.log(visited[targetX][targetY] - 1);
+      break;
+    }
     for (let i = 0; i < 8; i++) {
       const nx = curX + dx[i];
       const ny = curY + dy[i];
@@ -57,8 +61,6 @@ while (testCases--) {
       }
     }
   }
-
-  console.log(visited[targetX][targetY] - 1);
 
   line += 3;
 }
