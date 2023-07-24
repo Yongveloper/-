@@ -32,17 +32,19 @@ class Queue {
 
 let testCases = Number(input[0]);
 let line = 1;
+
 const dx = [-2, -2, -1, -1, 1, 1, 2, 2];
-const dy = [-1, 1, -2, 2, 2, -2, 1, -1];
-let answer = '';
+const dy = [-1, 1, -2, 2, -2, 2, -1, 1];
+
 while (testCases--) {
   const l = Number(input[line]);
+  const visited = Array.from({ length: l }, () => new Array(l).fill(0));
   const [x, y] = input[line + 1].split(' ').map(Number);
   const [targetX, targetY] = input[line + 2].split(' ').map(Number);
-  const visited = Array.from({ length: l }, () => new Array(l).fill(0));
   const queue = new Queue();
   queue.enqueue([x, y]);
   visited[x][y] = 1;
+
   while (queue.size() !== 0) {
     const [curX, curY] = queue.dequeue();
     for (let i = 0; i < 8; i++) {
@@ -55,8 +57,8 @@ while (testCases--) {
       }
     }
   }
-  answer += visited[targetX][targetY] - 1 + '\n';
+
+  console.log(visited[targetX][targetY] - 1);
+
   line += 3;
 }
-
-console.log(answer);
