@@ -27,32 +27,31 @@ class Queue {
 }
 
 function solution(maps) {
-  let answer = 0;
   const queue = new Queue();
   const [n, m] = [maps.length, maps[0].length];
-
-  const visited = Array.from({ length: n }, () => new Array(m).fill(0));
   const [targetX, targetY] = [n - 1, m - 1];
   const dx = [-1, 1, 0, 0];
   const dy = [0, 0, -1, 1];
-  queue.enqueue([0, 0]);
-  visited[0][0] = 1;
+  queue.enqueue([0, 0, 1]);
 
   while (queue.size() !== 0) {
-    const [x, y] = queue.dequeue();
+    const [x, y, cost] = queue.dequeue();
+    if (x === targetX && y === targetY) {
+      return cost;
+    }
 
     for (let i = 0; i < 4; i++) {
       const nx = x + dx[i];
       const ny = y + dy[i];
       if (nx < 0 || nx >= n || ny < 0 || ny >= m) continue;
-      if (maps[nx][ny] === 0) continue;
-      if (visited[nx][ny] === 0) {
-        queue.enqueue([nx, ny]);
-        visited[nx][ny] = visited[x][y] + 1;
+      if (maps[nx][ny] === 1) {
+        queue.enqueue([nx, ny, cost + 1]);
+        maps[nx][ny] = 0;
       }
     }
   }
 
-  answer = visited[targetX][targetY] || -1;
-  return answer;
+  return -1;
 }
+
+
