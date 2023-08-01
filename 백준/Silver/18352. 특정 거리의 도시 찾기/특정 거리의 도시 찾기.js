@@ -46,6 +46,8 @@ visited[x] = true;
 while (queue.size() !== 0) {
   const [v, cost] = queue.dequeue();
 
+  if (cost === k) break;
+
   for (const nv of graph[v]) {
     if (!visited[nv]) {
       visited[nv] = true;
