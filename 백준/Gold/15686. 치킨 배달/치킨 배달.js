@@ -3,14 +3,14 @@ const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const [n, m] = input[0].split(' ').map(Number);
-const chicken = [];
 const house = [];
+const chicken = [];
 for (let i = 1; i <= n; i++) {
-  const line = input[i].split(' ').map(Number);
+  const row = input[i].split(' ').map(Number);
   for (let j = 0; j < n; j++) {
-    if (line[j] === 1) {
+    if (row[j] === 1) {
       house.push([i, j]);
-    } else if (line[j] === 2) {
+    } else if (row[j] === 2) {
       chicken.push([i, j]);
     }
   }
@@ -41,4 +41,5 @@ const dfs = (depth, start) => {
 };
 
 dfs(0, 0);
+
 console.log(answer);
