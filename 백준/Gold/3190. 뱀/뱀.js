@@ -37,12 +37,21 @@ for (let i = 2; i < k + 2; i++) {
   const [x, y] = input[i].split(' ').map(Number);
   graph[x][y] = 1;
 }
+let time = 0;
+let direction = 0;
+let index = 0;
+let [x, y] = [1, 1];
+graph[x][y] = 2;
+const queue = new Queue();
+queue.enqueue([x, y]);
+
 const l = Number(input[k + 2]);
 const info = [];
 for (let i = k + 3; i < k + 3 + l; i++) {
   const [x, c] = input[i].split(' ');
   info.push([Number(x), c]);
 }
+
 const dx = [0, 1, 0, -1];
 const dy = [1, 0, -1, 0];
 
@@ -56,33 +65,28 @@ const turn = (direction, c) => {
   return direction;
 };
 
-let [x, y] = [1, 1];
-graph[x][y] = 2;
-let direction = 0;
-let time = 0;
-let index = 0;
-const q = new Queue();
-q.enqueue([x, y]);
-
 while (true) {
   const nx = x + dx[direction];
   const ny = y + dy[direction];
-  if (1 <= nx && nx <= n && 1 <= ny && ny <= n && graph[nx][ny] !== 2) {
-    if (graph[nx][ny] === 0) {
-      graph[nx][ny] = 2;
-      q.enqueue([nx, ny]);
-      const [px, py] = q.dequeue();
-      graph[px][py] = 0;
-    } else {
-      graph[nx][ny] = 2;
-      q.enqueue([nx, ny]);
-    }
-  } else {
+
+  if (nx < 1 || nx > n || ny < 1 || ny > n || graph[nx][ny] === 2) {
     time++;
     break;
   }
+
+  if (graph[nx][ny] === 1) {
+    graph[nx][ny] = 2;
+    queue.enqueue([nx, ny]);
+  } else {
+    queue.enqueue([nx, ny]);
+    graph[nx][ny] = 2;
+    const [px, py] = queue.dequeue();
+    graph[px][py] = 0;
+  }
+
   [x, y] = [nx, ny];
   time++;
+
   if (index < l && info[index][0] === time) {
     direction = turn(direction, info[index][1]);
     index++;
