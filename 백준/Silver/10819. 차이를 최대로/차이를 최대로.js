@@ -4,8 +4,8 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const n = Number(input[0]);
 const arr = input[1].split(' ').map(Number);
-const visited = new Array(n).fill(false);
 const result = [];
+const visited = new Array(n).fill(false);
 let answer = 0;
 
 const dfs = (depth) => {
@@ -20,13 +20,14 @@ const dfs = (depth) => {
 
   for (let i = 0; i < n; i++) {
     if (visited[i]) continue;
-    result.push(arr[i]);
     visited[i] = true;
+    result.push(arr[i]);
     dfs(depth + 1);
-    result.pop();
     visited[i] = false;
+    result.pop();
   }
 };
 
 dfs(0);
+
 console.log(answer);
