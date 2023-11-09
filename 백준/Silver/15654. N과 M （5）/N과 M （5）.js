@@ -5,11 +5,11 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 const [n, m] = input[0].split(' ').map(Number);
 const arr = input[1].split(' ').map(Number);
 arr.sort((a, b) => a - b);
-const result = [];
-const visited = new Array(n).fill(false);
 let answer = '';
+const visited = new Array(n).fill(false);
+const result = [];
 
-function dfs(depth) {
+const dfs = (depth) => {
   if (depth === m) {
     answer += result.join(' ') + '\n';
     return;
@@ -19,10 +19,10 @@ function dfs(depth) {
     visited[i] = true;
     result.push(arr[i]);
     dfs(depth + 1);
-    result.pop();
     visited[i] = false;
+    result.pop();
   }
-}
+};
 
 dfs(0);
 
