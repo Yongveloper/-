@@ -4,50 +4,64 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const n = Number(input[0]);
 const graph = input.slice(1).map((item) => item.split(''));
-const visited = Array.from({ length: n }, () => new Array(n).fill(false));
-
+let answer = '';
 const dx = [-1, 1, 0, 0];
 const dy = [0, 0, -1, 1];
 
-const dfs = (x, y) => {
-  if (visited[x][y]) return false;
-  visited[x][y] = true;
+const dfs = (graph, x, y, target) => {
+  if (x < 0 || x >= n || y < 0 || y >= n) {
+    return false;
+  }
+
+  if (graph[x][y] === 'X') {
+    return false;
+  }
+
+  if (graph[x][y] !== target) {
+    return false;
+  }
+
+  graph[x][y] = 'X';
+
   for (let i = 0; i < 4; i++) {
     const nx = x + dx[i];
     const ny = y + dy[i];
-    if (nx < 0 || nx >= n || ny < 0 || ny >= n) continue;
-    if (graph[x][y] === graph[nx][ny]) {
-      dfs(nx, ny);
-    }
+    dfs(graph, nx, ny, target);
   }
+
   return true;
 };
 
-let answer = 0;
+let count = 0;
+const newGraph = graph.map((item) => [...item]);
+
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
-    if (dfs(i, j)) {
-      answer++;
+    if (dfs(newGraph, i, j, newGraph[i][j])) {
+      count++;
     }
   }
 }
 
+answer += count + ' ';
+count = 0;
+
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
-    visited[i][j] = false;
     if (graph[i][j] === 'R') {
       graph[i][j] = 'G';
     }
   }
 }
 
-let answer2 = 0;
 for (let i = 0; i < n; i++) {
   for (let j = 0; j < n; j++) {
-    if (dfs(i, j)) {
-      answer2++;
+    if (dfs(graph, i, j, graph[i][j])) {
+      count++;
     }
   }
 }
 
-console.log(answer + ' ' + answer2);
+answer += count;
+
+console.log(answer);
