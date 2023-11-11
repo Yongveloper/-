@@ -5,29 +5,28 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 const [n, m] = input[0].split(' ').map(Number);
 const house = [];
 const chicken = [];
+const result = [];
+let answer = Number.MAX_SAFE_INTEGER;
 for (let i = 1; i <= n; i++) {
   const row = input[i].split(' ').map(Number);
   for (let j = 0; j < n; j++) {
     if (row[j] === 1) {
-      house.push([i, j]);
+      house.push([i, j + 1]);
     } else if (row[j] === 2) {
-      chicken.push([i, j]);
+      chicken.push([i, j + 1]);
     }
   }
 }
 
-const result = [];
-let answer = 1e9;
-
 const dfs = (depth, start) => {
   if (depth === m) {
     let sum = 0;
-    for (const [hx, hy] of house) {
-      let temp = 1e9;
-      for (const [cx, cy] of result) {
-        temp = Math.min(temp, Math.abs(hx - cx) + Math.abs(hy - cy));
+    for (const h of house) {
+      let min = 1e9;
+      for (const c of result) {
+        min = Math.min(min, Math.abs(h[0] - c[0]) + Math.abs(h[1] - c[1]));
       }
-      sum += temp;
+      sum += min;
     }
     answer = Math.min(answer, sum);
     return;
@@ -36,7 +35,7 @@ const dfs = (depth, start) => {
   for (let i = start; i < chicken.length; i++) {
     result.push(chicken[i]);
     dfs(depth + 1, i + 1);
-    result.pop();
+    result.pop(chicken[i]);
   }
 };
 
