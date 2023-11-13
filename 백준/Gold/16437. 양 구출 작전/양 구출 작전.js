@@ -1,35 +1,33 @@
-function dfs(curIndex) {
-  let sCount = 0;
-  for (let i of tree[curIndex]) {
-    sCount += dfs(i);
-  }
-  if (islandInfo[curIndex][0] === "W") {
-    sCount -= islandInfo[curIndex][1];
-    if (sCount < 0) {
-      sCount = 0;
-    }
-  } else {
-    sCount += islandInfo[curIndex][1];
-  }
-  return sCount;
+const fs = require('fs');
+const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
+const input = fs.readFileSync(file).toString().trim().split('\n');
+
+const n = Number(input[0]);
+const tree = Array.from({ length: n + 1 }, () => []);
+const infos = [[], [0, 0]];
+for (let i = 1; i < n; i++) {
+  const [t, a, p] = input[i].split(' ');
+
+  tree[Number(p)].push(i + 1);
+  infos.push([t, Number(a)]);
 }
 
-let input = require("fs")
-  .readFileSync(process.platform === "linux" ? "dev/stdin" : "input.txt")
-  .toString()
-  .trim()
-  .split("\n");
+function dfs(curIndex) {
+  let sum = 0;
+  for (const x of tree[curIndex]) {
+    sum += dfs(x);
+  }
 
-const n = +input[0];
-let board = input.slice(1).map((str) => str.trim().split(" "));
+  if (infos[curIndex][0] === 'W') {
+    sum -= infos[curIndex][1];
+    if (sum < 0) {
+      sum = 0;
+    }
+  } else {
+    sum += infos[curIndex][1];
+  }
 
-let islandInfo = [[], [0, 0]];
-let tree = Array.from(Array(n + 1), () => new Array().fill([]));
-
-board.forEach((val, idx) => {
-  const [t, a, p] = val;
-  islandInfo.push([t, +a]);
-  tree[+p].push(idx + 2);
-});
+  return sum;
+}
 
 console.log(dfs(1));
