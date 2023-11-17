@@ -1,5 +1,5 @@
 function solution(tickets) {
-    let routes = {};
+    const routes = {};
     
     for(let i=0; i<tickets.length;i++){
         const [start, end] = tickets[i];
@@ -14,10 +14,10 @@ function solution(tickets) {
         routes[airport].sort().reverse();
     }
     
-    let stack = ["ICN"];
-    let path = [];
+    const stack = ["ICN"];
+    const path = [];
     while(stack.length > 0){
-        let top = stack.at(-1);
+        const top = stack.at(-1);
         if(!routes[top] || routes[top].length === 0){
             path.push(stack.pop());
         } else {
