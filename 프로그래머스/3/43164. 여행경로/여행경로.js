@@ -1,29 +1,28 @@
 function solution(tickets) {
-    const routes = {};
-    
-    for(let i=0; i<tickets.length;i++){
-        const [start, end] = tickets[i];
-        if(routes[start]){
-            routes[start].push(end);
-        } else {
-            routes[start] = [end];
+    let routes = {};
+
+    tickets.forEach(([from, to]) => {
+        if (!routes[from]) {
+            routes[from] = [];
         }
+        routes[from].push(to);
+    });
+
+    for (let airport in routes) {
+        routes[airport].sort();
     }
-    
-    for(let airport in routes){
-        routes[airport].sort().reverse();
-    }
-    
-    const stack = ["ICN"];
+
     const path = [];
-    while(stack.length > 0){
-        const top = stack.at(-1);
-        if(!routes[top] || routes[top].length === 0){
-            path.push(stack.pop());
-        } else {
-            stack.push(routes[top].pop());
+
+    function dfs(airport) {
+        while (routes[airport] && routes[airport].length > 0) {
+            dfs(routes[airport].shift());
         }
+        path.push(airport);
     }
-    
+
+    dfs('ICN');
+
     return path.reverse();
+
 }
