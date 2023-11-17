@@ -17,7 +17,7 @@ function solution(tickets) {
     let stack = ["ICN"];
     let path = [];
     while(stack.length > 0){
-        let top = stack[stack.length-1];
+        let top = stack.at(-1);
         if(!routes[top] || routes[top].length === 0){
             path.push(stack.pop());
         } else {
