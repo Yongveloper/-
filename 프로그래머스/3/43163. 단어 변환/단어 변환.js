@@ -1,5 +1,4 @@
 function solution(begin, target, words) {
-    if (!words.includes(target)) return 0;
 
     let visited = Array(words.length).fill(false);
     let queue = [[begin, 0]];
