@@ -2,30 +2,25 @@ function solution(numbers, hand) {
   let answer = '';
   let currLeft = '*';
   let currRight = '#';
-  const keypad = [
-    [1, 2, 3],
-    [4, 5, 6],
-    [7, 8, 9],
-    ['*', 0, '#'],
-  ];
+  const keyPad = {
+    1: [0, 0],
+    2: [0, 1],
+    3: [0, 2],
+    4: [1, 0],
+    5: [1, 1],
+    6: [1, 2],
+    7: [2, 0],
+    8: [2, 1],
+    9: [2, 2],
+    '*': [3, 0],
+    0: [3, 1],
+    '#': [3, 2],
+  };
 
   const selectHand = (target) => {
-    let leftPos = [];
-    let rightPos = [];
-    let targetPos = [];
-    for (let i = 0; i < keypad.length; i++) {
-      for (let j = 0; j < 3; j++) {
-        if (currLeft === keypad[i][j]) {
-          leftPos = [i, j];
-        }
-        if (currRight === keypad[i][j]) {
-          rightPos = [i, j];
-        }
-        if (target === keypad[i][j]) {
-          targetPos = [i, j];
-        }
-      }
-    }
+    let leftPos = keyPad[currLeft];
+    let rightPos = keyPad[currRight];
+    let targetPos = keyPad[target];
 
     const l =
       Math.abs(leftPos[0] - targetPos[0]) + Math.abs(leftPos[1] - targetPos[1]);
