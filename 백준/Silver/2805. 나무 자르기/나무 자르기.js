@@ -5,26 +5,25 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 const [n, m] = input[0].split(' ').map(Number);
 const arr = input[1].split(' ').map(Number);
 
-let start = 1;
+let start = 0;
 let end = Math.max(...arr);
-
-let result = 0;
+let answer = 0;
 
 while (start <= end) {
-  const mid = Math.floor((start + end) / 2); // 높이 지정
+  let mid = Math.ceil((start + end) / 2);
   let total = 0;
   for (const x of arr) {
-    const sub = x - mid;
-    if (sub > 0) {
-      total += sub;
+    if (x >= mid) {
+      total += x - mid;
     }
   }
+
   if (total >= m) {
-    result = mid;
     start = mid + 1;
+    answer = mid;
   } else {
     end = mid - 1;
   }
 }
 
-console.log(result);
+console.log(answer);
