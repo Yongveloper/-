@@ -1,31 +1,33 @@
 const fs = require('fs');
 const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
-const input = fs.readFileSync(file).toString().trim();
+const input = fs.readFileSync(file).toString().trim().split('\n');
 
-const n = Number(input);
+const n = Number(input[0]);
 const queens = [];
-let count = 0;
+let answer = 0;
 
-function possible(x, y) {
+const possible = (x, y) => {
   for (const [a, b] of queens) {
-    if (x === a || b === y) return false;
-    if (Math.abs(x - a) === Math.abs(y - b)) return false;
+    if (a === x || b === y) return false;
+    if (Math.abs(a - x) === Math.abs(b - y)) return false;
   }
   return true;
-}
+};
 
-function dfs(row) {
+const dfs = (row) => {
+  if (row > n) return;
+
   if (row === n) {
-    count++;
-    return;
+    answer++;
   }
+
   for (let i = 0; i < n; i++) {
     if (!possible(row, i)) continue;
     queens.push([row, i]);
     dfs(row + 1);
     queens.pop();
   }
-}
+};
 dfs(0);
 
-console.log(count);
+console.log(answer);
