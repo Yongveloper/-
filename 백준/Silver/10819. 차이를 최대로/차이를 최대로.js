@@ -4,17 +4,18 @@ const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const n = Number(input[0]);
 const arr = input[1].split(' ').map(Number);
+
+let answer = -Infinity;
+let visited = new Array(n + 1).fill(false);
 const result = [];
-const visited = new Array(n).fill(false);
-let answer = 0;
 
 const dfs = (depth) => {
-  if (depth === n) {
-    let sum = 0;
-    for (let i = 0; i < n - 1; i++) {
-      sum += Math.abs(result[i] - result[i + 1]);
+  if (result.length === n) {
+    let total = 0;
+    for (let i = 1; i < n; i++) {
+      total += Math.abs(result[i] - result[i - 1]);
     }
-    answer = Math.max(answer, sum);
+    answer = Math.max(answer, total);
     return;
   }
 
@@ -29,5 +30,4 @@ const dfs = (depth) => {
 };
 
 dfs(0);
-
 console.log(answer);
