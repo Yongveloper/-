@@ -13,25 +13,25 @@ for (let i = 1; i < n; i++) {
   graph[b].push([a, c]);
 }
 
-function dfs(v, target, sum) {
-  if (visited[v]) return;
+const dfs = (node, target, total) => {
+  if (visited[node]) return;
 
-  if (v === target) {
-    answer += sum + '\n';
+  if (node === target) {
+    answer += total + '\n';
     return;
   }
 
-  visited[v] = true;
+  visited[node] = true;
 
-  for (const [a, b] of graph[v]) {
-    dfs(a, target, sum + b);
+  for (const [a, b] of graph[node]) {
+    dfs(a, target, total + b);
   }
-}
+};
 
 for (let i = n; i < n + m; i++) {
-  const [a, b] = input[i].split(' ').map(Number);
-  dfs(a, b, 0);
-  visited = new Array(n + 1).fill(false);
+  const [start, target] = input[i].split(' ').map(Number);
+  dfs(start, target, 0);
+  visited = Array(n + 1).fill(false);
 }
 
 console.log(answer);
