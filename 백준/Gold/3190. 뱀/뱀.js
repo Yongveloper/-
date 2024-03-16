@@ -1,7 +1,6 @@
 const fs = require('fs');
 const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split('\n');
-
 class Queue {
   constructor() {
     this.items = {};
@@ -18,6 +17,7 @@ class Queue {
     const item = this.items[this.headIndex];
     delete this.items[this.headIndex];
     this.headIndex++;
+
     return item;
   }
 
@@ -31,66 +31,63 @@ class Queue {
 }
 
 const n = Number(input[0]);
-const k = Number(input[1]);
-const graph = Array.from({ length: n + 1 }, () => Array(n + 1).fill(0));
-for (let i = 2; i < k + 2; i++) {
-  const [x, y] = input[i].split(' ').map(Number);
-  graph[x][y] = 1;
+const board = Array.from({ length: n }, () => Array(n).fill(0));
+const apples = input
+  .slice(2, Number(input[1]) + 2)
+  .map((item) => item.split(' ').map(Number));
+
+for (const [x, y] of apples) {
+  board[x - 1][y - 1] = 2;
 }
+const l = input[Number(input[1]) + 2];
+
+// 사과:2, 방문: 1, 없음: 0
+const directions = input
+  .slice(Number(input[1]) + 3)
+  .map((item) => item.split(' '));
 let time = 0;
-let direction = 0;
-let index = 0;
-let [x, y] = [1, 1];
-graph[x][y] = 2;
-const queue = new Queue();
-queue.enqueue([x, y]);
-
-const l = Number(input[k + 2]);
-const info = [];
-for (let i = k + 3; i < k + 3 + l; i++) {
-  const [x, c] = input[i].split(' ');
-  info.push([Number(x), c]);
-}
-
 const dx = [0, 1, 0, -1];
 const dy = [1, 0, -1, 0];
+let currentDirectionIndex = 0;
+let count = 0;
 
-const turn = (direction, c) => {
-  if (c === 'L') {
-    direction = direction - 1;
-    if (direction === -1) direction = 3;
-  } else {
-    direction = (direction + 1) % 4;
-  }
-  return direction;
-};
+const queue = new Queue();
+queue.enqueue([0, 0]);
+board[0][0] = 1;
+let [x, y] = [0, 0];
 
-while (true) {
-  const nx = x + dx[direction];
-  const ny = y + dy[direction];
-
-  if (nx < 1 || nx > n || ny < 1 || ny > n || graph[nx][ny] === 2) {
-    time++;
-    break;
-  }
-
-  if (graph[nx][ny] === 1) {
-    graph[nx][ny] = 2;
-    queue.enqueue([nx, ny]);
-  } else {
-    queue.enqueue([nx, ny]);
-    graph[nx][ny] = 2;
-    const [px, py] = queue.dequeue();
-    graph[px][py] = 0;
-  }
-
-  [x, y] = [nx, ny];
+while (queue.size() !== 0) {
+  const nx = dx[currentDirectionIndex] + x;
+  const ny = dy[currentDirectionIndex] + y;
   time++;
-
-  if (index < l && info[index][0] === time) {
-    direction = turn(direction, info[index][1]);
-    index++;
+  if (nx < 0 || nx >= n || ny < 0 || ny >= n) {
+    return console.log(time);
   }
-}
+  if (board[nx][ny] === 1) {
+    return console.log(time);
+  }
 
-console.log(time);
+  if (count < l && Number(directions[count][0]) === time) {
+    const dir = directions[count][1];
+    if (dir === 'D') {
+      currentDirectionIndex++;
+      if (currentDirectionIndex >= 4) {
+        currentDirectionIndex = 0;
+      }
+    } else {
+      currentDirectionIndex--;
+      if (currentDirectionIndex < 0) {
+        currentDirectionIndex = 3;
+      }
+    }
+    count++;
+  }
+
+  if (board[nx][ny] === 0) {
+    const [x, y] = queue.dequeue();
+    board[x][y] = 0;
+  }
+  queue.enqueue([nx, ny]);
+  [x, y] = [nx, ny];
+  board[nx][ny] = 1;
+}
