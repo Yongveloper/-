@@ -3,6 +3,7 @@ const file = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
 const input = fs.readFileSync(file).toString().trim().split('\n');
 
 const [n, m] = input[0].split(' ').map(Number);
+
 const graph = Array.from({ length: n + 1 }, () => []);
 let visited = [];
 let answer = '';
@@ -14,24 +15,24 @@ for (let i = 1; i < n; i++) {
 }
 
 const dfs = (node, target, total) => {
-  if (visited[node]) return;
-
-  if (node === target) {
-    answer += total + '\n';
-    return;
-  }
-
-  visited[node] = true;
-
   for (const [a, b] of graph[node]) {
+    if (visited[a]) continue;
+    visited[a] = true;
+    if (a === target) {
+      answer += `${total + b} \n`;
+      return;
+    }
+
     dfs(a, target, total + b);
   }
 };
 
 for (let i = n; i < n + m; i++) {
-  const [start, target] = input[i].split(' ').map(Number);
-  dfs(start, target, 0);
-  visited = Array(n + 1).fill(false);
+  const [a, b] = input[i].split(' ').map(Number);
+
+  visited = new Array(n + 1).fill(false);
+  visited[a] = true;
+  dfs(a, b, 0);
 }
 
 console.log(answer);
